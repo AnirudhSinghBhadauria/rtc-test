@@ -1,16 +1,17 @@
 "use client";
 
-import React, { FormEvent, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
 const Homepage = () => {
   const socket = useMemo(() => io("http://localhost:8080"), []);
 
-  const [message, setMessage] = useState("");
+  const [messageBucket, setMessageBucket] = useState<
+    { id: String; message: String }[]
+  >([]);
 
-  const submitHandeler = (event: FormEvent) => {
-    event.preventDefault();
-    // console.log("submitted!");
+  const submitHandeler = async (formData: FormData) => {
+    const message = formData.get("messages");
     socket.emit("SendMessage", { id: socket.id, message });
   };
 
@@ -21,9 +22,10 @@ const Homepage = () => {
     });
 
     // Reciveing message!
-    socket.on("ReciveMessage", ({ id, message }) =>
-      console.log(`${id}: ${message}`)
-    );
+    socket.on("ReciveMessage", ({ id, message }) => {
+      console.log(`${id}: ${message}`);
+      setMessageBucket((bucket) => [...bucket, { id, message }]);
+    });
 
     // Emmiters!
     // socket.emit("ping", {
@@ -33,23 +35,19 @@ const Homepage = () => {
   }, []);
 
   return (
-    <form
-      onSubmit={submitHandeler}
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <input
-        onChange={(event) => setMessage(event.target.value)}
-        type="text"
-        value={message}
-      />
-      <button type="submit">Send</button>
-    </form>
+    <div>
+      <form action={submitHandeler}>
+        <input type="text" name="messages" />
+        <button type="submit">Send</button>
+      </form>
+      <div style={{ marginTop: "20px" }}>
+        {messageBucket.map(({ id, message }) => (
+          <p>
+            {id} : {message}
+          </p>
+        ))}
+      </div>
+    </div>
   );
 };
 

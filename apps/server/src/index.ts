@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   // Listners!
+
   // socket.on("ping", ({ name, message }) => {
   //   console.log(`${name}: ${message}`);
   // });

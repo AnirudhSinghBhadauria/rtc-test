@@ -34,6 +34,19 @@ io.on("connection", (socket) => {
     io.emit("ReciveMessage", messageData);
   });
 
+  socket.on("joinRoom", ({ socketId, roomName }) => {
+    socket.join(roomName);
+
+    // console.log(`${socket.id} has joined Room - ${roomName}`);
+    // sending the joining information to frontend!
+    socket.emit("joinRoom", { socket: socketId, roomName });
+  });
+
+  socket.on("messageSent", ({ socketId, message, roomName }) => {
+    // Sending messsage to the whole room!
+    io.to(roomName).emit("messageSent", { socketId, message });
+  });
+
   // Emitters!
 
   // A new User joins!

@@ -47,6 +47,16 @@ io.on("connection", (socket) => {
     io.to(roomName).emit("messageSent", { socketId, message });
   });
 
+  socket.on("leaveRoom", ({ socketId }) => {
+    socket.on("disconnecting", () => {
+      console.log(socket.rooms); // the Set contains at least the socket ID
+    });
+
+    socket.on("disconnect", () => {
+      socket.rooms.size === 0;
+    });
+  });
+
   // Emitters!
 
   // A new User joins!

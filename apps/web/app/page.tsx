@@ -3,46 +3,31 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
-type Room = {
+interface Room {
   name: String;
   users: { socket: String; messages: [] }[];
-};
+}
 
-type RoomMessageBucket = {
+interface RoomMessageBucket {
   socket: String;
   message: String;
-}[];
-
-const containerStyles: any = {
-  width: "100%",
-  height: "100vh",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-};
+}
 
 const Homepage = () => {
   const socket = useMemo(() => io("http://localhost:8080"), []);
 
-  const [messageBucket, setMessageBucket] = useState<
-    { id: String; message: String }[]
-  >([]);
+  // Room States!
 
   const [roomDetails, setRoomDetails] = useState<Room>({
     name: "",
     users: [],
   });
 
-  const [roomMessageBucket, setRoomMessageBucket] = useState<RoomMessageBucket>(
-    []
-  );
+  const [roomMessageBucket, setRoomMessageBucket] = useState<
+    RoomMessageBucket[]
+  >([]);
 
-  // Non-room message Handeler!
-  // const submitHandeler = async (formData: FormData) => {
-  //   const message = formData.get("messages");
-  //   socket.emit("SendMessage", { id: socket.id, message });
-  // };
+  // Room Handelers!
 
   const joinRoomHandeler = (formData: FormData) => {
     const roomName = formData.get("room");
@@ -60,19 +45,19 @@ const Homepage = () => {
     });
   };
 
+  const leaveRoomHandeler = () => {
+    // Now this sokcet will get disconnected with all the rooms that it existed!
+    socket.emit("leaveRoom", {socket: socket.id});
+    
+  };
+
+  // Room Events!
+
   useEffect(() => {
     // Listners!
     socket.on("UserJoins", ({ socketName }) => {
       console.log(`New User Joined!, Hello, I am ${socketName}`);
     });
-
-    // Reciveing message!
-    socket.on("ReciveMessage", ({ id, message }) => {
-      console.log(`${id}: ${message}`);
-      setMessageBucket((bucket) => [...bucket, { id, message }]);
-    });
-
-    // ROOM EVENTS!
 
     // User joined Room!
     socket.on("joinRoom", ({ socketId, roomName }) => {
@@ -98,21 +83,15 @@ const Homepage = () => {
       console.log(`${socket.id} has joined Room - ${roomName}`);
     });
 
-    // Send Messages to the room!
     socket.on(
       "messageSent",
       ({ socketId, message }: { socketId: string; message: string }) => {
-        // Save message to a state variable and display on the screen!
-
         const user = roomDetails?.users.find(
           (user) => user.socket === socketId
         );
-        // console.log(roomDetails);
 
         // @ts-ignore
         user?.messages.push(message);
-
-        // roomDetails && console.log(roomDetails);
 
         setRoomMessageBucket((roomMessages) => [
           ...roomMessages,
@@ -123,42 +102,58 @@ const Homepage = () => {
         ]);
       }
     );
+
+    // socket.on("leaveRoom", ({ socketId }) => {
+    //   console.log(`${socketId} left ${roomDetails.name}`);
+    // });
   }, []);
 
   return (
     <div style={containerStyles}>
-      <form action={joinRoomHandeler}>
-        <input style={{ padding: "10px" }} type="text" name="room" />
-        <button style={{ marginLeft: "10px", padding: "10px" }} type="submit">
-          Join room
-        </button>
-      </form>
-
-      {/* Make this "submitHandeler" for sending normal messages! */}
-      <div>
-        <h1>{roomDetails?.name}</h1>
-        <form action={sendMessageToRoom}>
-          <input style={{ padding: "10px" }} type="text" name="messages" />
+      {!roomDetails.name ? (
+        <form action={joinRoomHandeler}>
+          <input style={{ padding: "10px" }} type="text" name="room" />
           <button style={{ marginLeft: "10px", padding: "10px" }} type="submit">
-            Send Message to Room
+            Join room
           </button>
         </form>
-        {roomMessageBucket.map(({ message }) => (
-          <p>{message}</p>
-        ))}
-      </div>
-
-      {/* These hyderate DOM with normal non-room messages! */}
-
-      {/* <div style={{ marginTop: "20px" }}> */}
-      {/*   {messageBucket.map(({ id, message }) => ( */}
-      {/*     <p> */}
-      {/*       {id} : {message} */}
-      {/*     </p> */}
-      {/*   ))} */}
-      {/* </div> */}
+      ) : (
+        <div>
+          <h1 style={{ marginBottom: "20px" }}>{roomDetails?.name}</h1>
+          <form action={sendMessageToRoom} style={{ marginBottom: "20px" }}>
+            <input style={{ padding: "10px" }} type="text" name="messages" />
+            <button
+              style={{ marginLeft: "10px", padding: "10px" }}
+              type="submit"
+            >
+              Send
+            </button>
+            <button
+              onClick={leaveRoomHandeler}
+              style={{ marginLeft: "10px", padding: "10px" }}
+              type="button"
+            >
+              Leave room
+            </button>
+          </form>
+          {roomMessageBucket.map(({ message, socket }) => (
+            <p>
+              {socket} : {message}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
 export default Homepage;
+
+const containerStyles: any = {
+  width: "100%",
+  height: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};

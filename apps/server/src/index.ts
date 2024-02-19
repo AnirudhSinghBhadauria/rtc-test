@@ -29,8 +29,6 @@ io.on("connection", (socket) => {
   // });
 
   socket.on("SendMessage", (messageData) => {
-    // console.log(`${socket.id}: ${message}`);
-
     io.emit("ReciveMessage", messageData);
   });
 

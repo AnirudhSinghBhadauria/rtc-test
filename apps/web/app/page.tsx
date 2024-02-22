@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 
-
 interface Room {
   name: String;
   users: { socket: String; messages: [] }[];
@@ -16,6 +15,7 @@ interface RoomMessageBucket {
 
 const Homepage = () => {
   const socket = useMemo(() => io("http://localhost:8080"), []);
+  console.log("anirudh singh bhadauria");
 
   // Room States!
 
@@ -48,8 +48,7 @@ const Homepage = () => {
 
   const leaveRoomHandeler = () => {
     // Now this sokcet will get disconnected with all the rooms that it existed!
-    socket.emit("leaveRoom", {socket: socket.id});
-    
+    socket.emit("leaveRoom", { socket: socket.id });
   };
 
   // Room Events!
@@ -66,7 +65,7 @@ const Homepage = () => {
       setRoomDetails((prevDetails) => {
         // console.log(prevDetails);
         const currentUser = prevDetails?.users.find(
-          (user) => user.socket === socketId
+          (user) => user.socket === socketId,
         );
 
         // console.log(currentUser);
@@ -88,7 +87,7 @@ const Homepage = () => {
       "messageSent",
       ({ socketId, message }: { socketId: string; message: string }) => {
         const user = roomDetails?.users.find(
-          (user) => user.socket === socketId
+          (user) => user.socket === socketId,
         );
 
         // @ts-ignore
@@ -101,7 +100,7 @@ const Homepage = () => {
             message,
           },
         ]);
-      }
+      },
     );
 
     // socket.on("leaveRoom", ({ socketId }) => {

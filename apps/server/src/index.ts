@@ -8,11 +8,14 @@ import { Server } from "socket.io";
 const app = express();
 const server = createServer(app);
 const port = process.env.PORT || 3001;
+
 const io = new Server(server, {
   cors: {
     origin: "*",
   },
 });
+
+const username = "anriudh"
 
 app.get("/", (req, res) => {
   res.status(200).json({

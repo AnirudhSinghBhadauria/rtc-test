@@ -1,0 +1,9 @@
+{
+  "name": "date-format",
+  "exports": {
+    ".": "./date-format.ts"
+  },
+  "dependencies": {
+    "typescript": "^5.3.3"
+  }
+}

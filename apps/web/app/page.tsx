@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
+import { dateFormater } from "date-format";
 
 interface Room {
   name: String;
@@ -27,6 +28,10 @@ const Homepage = () => {
   const [roomMessageBucket, setRoomMessageBucket] = useState<
     RoomMessageBucket[]
   >([]);
+
+  const currentTime = new Date().toLocaleString("en-US", {
+    timeStyle: "short",
+  });
 
   // Room Handelers!
 
@@ -138,7 +143,7 @@ const Homepage = () => {
           </form>
           {roomMessageBucket.map(({ message, socket }) => (
             <p>
-              {socket} : {message}
+              {socket} : {message} : {currentTime}
             </p>
           ))}
         </div>

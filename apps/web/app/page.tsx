@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { dateFormater } from "date-format";
+import Hello from "@repo/ui/hello";
 
 interface Room {
   name: String;
@@ -70,7 +71,7 @@ const Homepage = () => {
       setRoomDetails((prevDetails) => {
         // console.log(prevDetails);
         const currentUser = prevDetails?.users.find(
-          (user) => user.socket === socketId,
+          (user) => user.socket === socketId
         );
 
         // console.log(currentUser);
@@ -92,7 +93,7 @@ const Homepage = () => {
       "messageSent",
       ({ socketId, message }: { socketId: string; message: string }) => {
         const user = roomDetails?.users.find(
-          (user) => user.socket === socketId,
+          (user) => user.socket === socketId
         );
 
         // @ts-ignore
@@ -105,7 +106,7 @@ const Homepage = () => {
             message,
           },
         ]);
-      },
+      }
     );
 
     // socket.on("leaveRoom", ({ socketId }) => {
@@ -119,7 +120,7 @@ const Homepage = () => {
         <form action={joinRoomHandeler}>
           <input style={{ padding: "10px" }} type="text" name="room" />
           <button style={{ marginLeft: "10px", padding: "10px" }} type="submit">
-            Join room
+            Join house
           </button>
         </form>
       ) : (

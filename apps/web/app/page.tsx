@@ -120,7 +120,7 @@ const Homepage = () => {
         <form action={joinRoomHandeler}>
           <input style={{ padding: "10px" }} type="text" name="room" />
           <button style={{ marginLeft: "10px", padding: "10px" }} type="submit">
-            Join house
+            Join room
           </button>
         </form>
       ) : (

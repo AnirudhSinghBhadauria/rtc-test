@@ -4,11 +4,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { dateFormater } from "date-format";
 import Hello from "@repo/ui/hello";
+// import { InputType } from "core/types";
+import { RoomType } from "core/types";
 
-interface Room {
-  name: String;
-  users: { socket: String; messages: [] }[];
-}
+// interface Room {
+//   name: String;
+//   users: { socket: String; messages: [] }[];
+// }
 
 interface RoomMessageBucket {
   socket: String;
@@ -17,11 +19,10 @@ interface RoomMessageBucket {
 
 const Homepage = () => {
   const socket = useMemo(() => io("http://localhost:8080"), []);
-  console.log("anirudh singh bhadauria");
 
   // Room States!
 
-  const [roomDetails, setRoomDetails] = useState<Room>({
+  const [roomDetails, setRoomDetails] = useState<RoomType>({
     name: "",
     users: [],
   });
@@ -114,6 +115,8 @@ const Homepage = () => {
     // });
   }, []);
 
+  console.log(dateFormater(new Date().toString()));
+
   return (
     <div style={containerStyles}>
       {!roomDetails.name ? (
@@ -141,6 +144,7 @@ const Homepage = () => {
             >
               Leave room
             </button>
+            <Hello />
           </form>
           {roomMessageBucket.map(({ message, socket }) => (
             <p>

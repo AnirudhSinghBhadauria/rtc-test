@@ -1,0 +1,11 @@
+{
+  "name": "core",
+  "private": "true",
+  "exports": {
+    "./types": "./src/types/input-types.ts"
+  },
+  "dependencies": {
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
+  }
+}

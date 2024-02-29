@@ -1,5 +1,6 @@
 {
   "name": "date-format",
+  "private": "true",
   "exports": {
     ".": "./date-format.ts"
   },

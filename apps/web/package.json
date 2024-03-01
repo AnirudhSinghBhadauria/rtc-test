@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/ui": "*",
+    "drizzle": "*",
     "date-format": "*",
     "core": "*",
     "next": "^14.0.4",

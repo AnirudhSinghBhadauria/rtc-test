@@ -4,6 +4,8 @@ dotenv.config();
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+// import { db } from "drizzle/db";
+// import { user } from "drizzle/schema/main";
 
 const app = express();
 const server = createServer(app);
@@ -21,6 +23,12 @@ app.get("/", (req, res) => {
     age: 21,
   });
 });
+
+// app.get("/users", async (req, res) => {
+//   const allUsers = await db.select().from(user);
+
+//   res.status(201).json(allUsers);
+// });
 
 io.on("connection", (socket) => {
   // Listners!

@@ -3,15 +3,21 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { dateFormater } from "date-format";
-import Hello from "@repo/ui/hello";
+// import Hello from "@repo/ui/hello";
 // import { InputType } from "core/types";
 import { RoomType } from "core/types";
+// import { user } from "drizzle/schema/main";
 // import { db } from "drizzle/db";
 
 // interface Room {
 //   name: String;
 //   users: { socket: String; messages: [] }[];
 // }
+
+// const allUser = async () => {
+//   return await db.select().from(user);
+// };
+// console.log(allUser());
 
 interface RoomMessageBucket {
   socket: String;
@@ -32,9 +38,7 @@ const Homepage = () => {
     RoomMessageBucket[]
   >([]);
 
-  const currentTime = new Date().toLocaleString("en-US", {
-    timeStyle: "short",
-  });
+  const currentTime = dateFormater(new Date().toString());
 
   // Room Handelers!
 
@@ -116,8 +120,6 @@ const Homepage = () => {
     // });
   }, []);
 
-  console.log(dateFormater(new Date().toString()));
-
   return (
     <div style={containerStyles}>
       {!roomDetails.name ? (
@@ -145,7 +147,6 @@ const Homepage = () => {
             >
               Leave room
             </button>
-            <Hello />
           </form>
           {roomMessageBucket.map(({ message, socket }) => (
             <p>

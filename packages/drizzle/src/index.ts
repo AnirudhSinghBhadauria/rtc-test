@@ -1,8 +1,8 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+// Database Client
+export * from "./client";
 
-const postgresConnection = postgres(
-  "postgres://chat_ebau_user:pi40o5ky67pxtsBw1MQ8aftpfKUxE59h@dpg-cngudcn79t8c73ah5e6g-a.singapore-postgres.render.com/chat_ebau?ssl=true"
-);
+// Database Schema
+export * from "./schema/main";
 
-export const db = drizzle(postgresConnection);
+// Database type
+export { type PostgresJsDatabase } from "drizzle-orm/postgres-js";

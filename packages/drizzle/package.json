@@ -1,15 +1,18 @@
 {
-  "name": "drizzle",
+  "name": "@chat/drizzle",
   "version": "1.0.0",
-  "description": "ORM",
-  "main": "index.js",
+  "private": "true",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "main:generate": "drizzle-kit generate:pg --schema ./src/schema/main.ts --out=./src/migrations",
-    "main:migrate": "npx tsx ./src/migrate.ts"
+    "main:migrate": "npx tsx ./src/migrate.ts",
+    "drizzle:studio": "npx drizzle-kit studio",
+    "dirzzle:push": "npx drizzle-kit push:pg"
   },
   "exports": {
-    "./db": "./src/index.ts",
-    "./schema/main": "./src/schema/main.ts"
+    ".": "./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,10 +21,10 @@
   "dependencies": {
     "drizzle-orm": "^0.29.4",
     "pg": "^8.11.3",
-    "postgres": "^3.4.3",
-    "typescript": "^5.3.3"
+    "postgres": "^3.4.3"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.20.14"
+    "drizzle-kit": "^0.20.14",
+    "typescript": "^5.3.3"
   }
 }
